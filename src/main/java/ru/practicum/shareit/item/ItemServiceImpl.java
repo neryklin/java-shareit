@@ -1,16 +1,15 @@
-package ru.practicum.shareit.user;
+package ru.practicum.shareit.item;
 
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.exception.ValidationException;
+import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.model.UserMapper;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -22,9 +21,9 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @AllArgsConstructor
-public class UserServiceImpl implements UserService {
+public class ItemServiceImpl implements ItemService {
 
-private final UserDao userDao;
+private final ItemDao userDao;
 
 
     @Override
@@ -83,5 +82,35 @@ public boolean checkUserValidDate(UserDto userDto){
     @Override
     public Boolean deleteUser(Long id) {
         return userDao.deleteUser(userDao.getUserById(id).orElseThrow(()-> new NotFoundException("User not found " + id)));
+    }
+
+    @Override
+    public Collection<ItemDao> findAllItem() {
+        return List.of();
+    }
+
+    @Override
+    public UserDto addItem(ItemDto itemDto) {
+        return null;
+    }
+
+    @Override
+    public UserDto getItemById(Long id) {
+        return null;
+    }
+
+    @Override
+    public UserDto updateItem(Long id, ItemDto itemDto) {
+        return null;
+    }
+
+    @Override
+    public Boolean deleteAllItem() {
+        return null;
+    }
+
+    @Override
+    public Boolean deleteItem(Long id) {
+        return null;
     }
 }

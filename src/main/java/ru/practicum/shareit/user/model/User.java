@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import ru.practicum.shareit.validation.NoWhitespace;
 
 /**
@@ -14,7 +15,6 @@ import ru.practicum.shareit.validation.NoWhitespace;
 @AllArgsConstructor
 @NoArgsConstructor
 public class User {
-
     private long id;
     @NotBlank(message = "Имя пусто?")
     @NoWhitespace
@@ -22,6 +22,4 @@ public class User {
     @NotBlank
     @Email(message = "адрес не корректный")
     private String email;
-
-
 }

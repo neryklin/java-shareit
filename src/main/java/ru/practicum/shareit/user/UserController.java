@@ -46,9 +46,10 @@ public class UserController {
         log.info("start delete user: {}", id);
         userService.deleteUser(id);
     }
-//    @PutMapping
-//    public UserDto updateUser(@Valid @RequestBody UpdateUserRequest updateUserRequest) {
-//        log.info("start update user: {}", updateUserRequest);
-//        return userService.updateUser(updateUserRequest.getId(), updateUserRequest);
-//    }
+
+    @PatchMapping("/{id}")
+    public UserDto updateUser(@PathVariable @Min(0) Long id, @Valid @RequestBody UserDto updateUserRequest) {
+        log.info("start update user: {}", id);
+        return userService.updateUser(id, updateUserRequest);
+    }
 }

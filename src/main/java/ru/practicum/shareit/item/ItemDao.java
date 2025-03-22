@@ -1,17 +1,14 @@
-package ru.practicum.shareit.user;
+package ru.practicum.shareit.item;
 
 
-import org.springframework.stereotype.Repository;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.model.User;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
 
 
-public interface UserDao {
+public interface ItemDao {
     Collection<User> findAllUsers();
 
     User addUser(User user);

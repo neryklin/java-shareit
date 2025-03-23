@@ -5,8 +5,10 @@ import org.springframework.stereotype.Repository;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.model.User;
 
-import java.lang.management.BufferPoolMXBean;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class UserDaoImpl implements UserDao {
@@ -27,19 +29,19 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public Optional<User> getUserById(Long id) {
-        Optional<User> optionalUser = usersList.stream().filter(o-> o.getId()==id).findFirst();
+        Optional<User> optionalUser = usersList.stream().filter(o -> o.getId() == id).findFirst();
         return optionalUser;
     }
 
     @Override
     public User updateUser(User user, UserDto updateUserDto) {
         if (usersList.contains(user)) {
-        }else {
+        } else {
             usersList.add(user);
         }
 
-        user.setEmail(updateUserDto.getEmail()==null ? user.getEmail() : updateUserDto.getEmail());
-        user.setName(updateUserDto.getName()==null ? user.getName() : updateUserDto.getName());
+        user.setEmail(updateUserDto.getEmail() == null ? user.getEmail() : updateUserDto.getEmail());
+        user.setName(updateUserDto.getName() == null ? user.getName() : updateUserDto.getName());
         return user;
     }
 
@@ -55,7 +57,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public Optional<User> findByEmail(String email) {
-        Optional<User> optionalUser = usersList.stream().filter(o-> o.getEmail().equals(email)).findFirst();
+        Optional<User> optionalUser = usersList.stream().filter(o -> o.getEmail().equals(email)).findFirst();
         return optionalUser;
     }
 

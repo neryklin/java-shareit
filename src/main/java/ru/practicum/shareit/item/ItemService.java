@@ -1,18 +1,21 @@
 package ru.practicum.shareit.item;
 
 import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.user.dto.UserDto;
 
 import java.util.Collection;
 
 public interface ItemService {
-    Collection<ItemDao> findAllItem();
+    Collection<ItemDto> findAllItem();
 
-    UserDto addItem(ItemDto itemDto);
+    Collection<ItemDto> getItemByUserId(Long userId);
 
-    UserDto getItemById(Long id);
+    Collection<ItemDto> findAllItemByText(String searchText);
 
-    UserDto updateItem(Long id, ItemDto itemDto);
+    ItemDto addItem(Long userId, ItemDto itemDto);
+
+    ItemDto getItemById(Long id);
+
+    ItemDto updateItem(Long userId, Long itemId, ItemDto itemDto);
 
     Boolean deleteAllItem();
 

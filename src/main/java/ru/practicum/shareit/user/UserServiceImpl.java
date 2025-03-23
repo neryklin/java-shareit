@@ -1,18 +1,16 @@
 package ru.practicum.shareit.user;
 
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import ru.practicum.shareit.exception.DuplacateDateException;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.model.UserMapper;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -24,13 +22,13 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
 
-private final UserDao userDao;
+    private final UserDao userDao;
 
 
     @Override
     public Collection<UserDto> findAllUsers() {
         return userDao.findAllUsers().stream()
-                .map(o->UserMapper.toUserDto(o))
+                .map(o -> UserMapper.toUserDto(o))
                 .collect(Collectors.toList());
 
     }
@@ -47,7 +45,7 @@ private final UserDao userDao;
 
     @Override
     public UserDto getUserById(Long id) {
-        User user = userDao.getUserById(id).orElseThrow(()-> new NotFoundException("User not found " + id));
+        User user = userDao.getUserById(id).orElseThrow(() -> new NotFoundException("User not found " + id));
         return UserMapper.toUserDto(user);
     }
 
@@ -55,24 +53,24 @@ private final UserDao userDao;
     public UserDto updateUser(Long id, UserDto userUpdateRequest) {
         Optional<User> alreadyExistUser = userDao.findByEmail(userUpdateRequest.getEmail());
         if (alreadyExistUser.isPresent()) {
-            throw new ValidationException("Данный имейл уже используется");
+            throw new DuplacateDateException("Данный имейл уже используется");
         }
-            User user = userDao.getUserById(id).orElseThrow(()-> new NotFoundException("User not found " + id));
-            return UserMapper.toUserDto(userDao.updateUser(user,userUpdateRequest));
+        User user = userDao.getUserById(id).orElseThrow(() -> new NotFoundException("User not found " + id));
+        return UserMapper.toUserDto(userDao.updateUser(user, userUpdateRequest));
 
     }
 
-public boolean checkUserValidDate(UserDto userDto){
-    if (userDto.getEmail() == null || userDto.getEmail().isEmpty()) {
-        throw new ValidationException("Имейл должен быть указан");
-    }
+    public boolean checkUserValidDate(UserDto userDto) {
+        if (userDto.getEmail() == null || userDto.getEmail().isEmpty()) {
+            throw new ValidationException("Имейл должен быть указан");
+        }
 
-    Optional<User> alreadyExistUser = userDao.findByEmail(userDto.getEmail());
-    if (alreadyExistUser.isPresent()) {
-        throw new ValidationException("Данный имейл уже используется");
+        Optional<User> alreadyExistUser = userDao.findByEmail(userDto.getEmail());
+        if (alreadyExistUser.isPresent()) {
+            throw new DuplacateDateException("Данный имейл уже используется");
+        }
+        return true;
     }
-    return true;
-}
 
     @Override
     public Boolean deleteAllUsers() {
@@ -82,6 +80,6 @@ public boolean checkUserValidDate(UserDto userDto){
 
     @Override
     public Boolean deleteUser(Long id) {
-        return userDao.deleteUser(userDao.getUserById(id).orElseThrow(()-> new NotFoundException("User not found " + id)));
+        return userDao.deleteUser(userDao.getUserById(id).orElseThrow(() -> new NotFoundException("User not found " + id)));
     }
 }

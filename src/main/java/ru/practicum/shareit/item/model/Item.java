@@ -23,7 +23,7 @@ public class Item {
     @NotBlank(message = "Описание пусто?")
     @Size(max = 200)
     private String description;
-    private boolean available;
+    private Boolean available;
     @NotNull
     private User owner;
     private ItemRequest request;

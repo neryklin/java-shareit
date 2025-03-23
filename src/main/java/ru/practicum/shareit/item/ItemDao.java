@@ -1,7 +1,8 @@
 package ru.practicum.shareit.item;
 
 
-import ru.practicum.shareit.user.dto.UserDto;
+import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
 
 import java.util.Collection;
@@ -9,17 +10,21 @@ import java.util.Optional;
 
 
 public interface ItemDao {
-    Collection<User> findAllUsers();
+    Collection<Item> findAllItem();
 
-    User addUser(User user);
+    Collection<Item> findAllItemByText(String string);
 
-    Optional<User> getUserById(Long id);
+    Item addItem(User user, Item item);
 
-    User updateUser(User user, UserDto updateUserDto);
+    Optional<Item> getItemById(Long id);
 
-    void deleteAllUsers();
+    Collection<Item> findAllItemByUserId(Long userId);
 
-    Boolean deleteUser(User user);
+    Item updateItem(User user, Item item, ItemDto updateItemDto);
 
-    Optional<User> findByEmail(String email);
+    void deleteAllItems();
+
+    Boolean deleteItem(Item item);
+
+
 }

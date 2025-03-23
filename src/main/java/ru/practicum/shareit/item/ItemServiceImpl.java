@@ -6,13 +6,13 @@ import org.springframework.stereotype.Service;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.user.dto.UserDto;
+import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.item.model.ItemMapper;
+import ru.practicum.shareit.user.UserDao;
 import ru.practicum.shareit.user.model.User;
-import ru.practicum.shareit.user.model.UserMapper;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -23,94 +23,79 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class ItemServiceImpl implements ItemService {
 
-private final ItemDao userDao;
-
+    private final ItemDao itemDao;
+    private final UserDao userDao;
 
     @Override
-    public Collection<UserDto> findAllUsers() {
-        return userDao.findAllUsers().stream()
-                .map(o->UserMapper.toUserDto(o))
+    public Collection<ItemDto> findAllItem() {
+        return itemDao.findAllItem().stream()
+                .map(o -> ItemMapper.toItemDto(o))
                 .collect(Collectors.toList());
-
     }
 
+    @Override
+    public Collection<ItemDto> getItemByUserId(Long userId) {
+        return itemDao.findAllItemByUserId(userId).stream()
+                .map(o -> ItemMapper.toItemDto(o))
+                .collect(Collectors.toList());
+    }
 
     @Override
-    public UserDto addUser(UserDto request) {
-        if (checkUserValidDate(request) == true) {
-            User user = userDao.addUser(UserMapper.toUser(request));
-            return UserMapper.toUserDto(user);
+    public Collection<ItemDto> findAllItemByText(String searchText) {
+        if (searchText.isEmpty()) {
+            return new ArrayList<ItemDto>();
+        }
+        return itemDao.findAllItemByText(searchText).stream()
+                .map(o -> ItemMapper.toItemDto(o))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public ItemDto addItem(Long userId, ItemDto itemDto) {
+        User user = userDao.getUserById(userId).orElseThrow(() -> new NotFoundException("User not found " + userId));
+        if (checkUserValidDate(itemDto) == true) {
+            Item item = itemDao.addItem(user, ItemMapper.toItem(itemDto));
+            return ItemMapper.toItemDto(item);
         }
         return null;
     }
 
     @Override
-    public UserDto getUserById(Long id) {
-        User user = userDao.getUserById(id).orElseThrow(()-> new NotFoundException("User not found " + id));
-        return UserMapper.toUserDto(user);
+    public ItemDto getItemById(Long id) {
+        Item item = itemDao.getItemById(id).orElseThrow(() -> new NotFoundException("Item not found " + id));
+        return ItemMapper.toItemDto(item);
     }
 
     @Override
-    public UserDto updateUser(Long id, UserDto userUpdateRequest) {
-        Optional<User> alreadyExistUser = userDao.findByEmail(userUpdateRequest.getEmail());
-        if (alreadyExistUser.isPresent()) {
-            throw new ValidationException("Данный имейл уже используется");
-        }
-            User user = userDao.getUserById(id).orElseThrow(()-> new NotFoundException("User not found " + id));
-            return UserMapper.toUserDto(userDao.updateUser(user,userUpdateRequest));
+    public ItemDto updateItem(Long userId, Long itemId, ItemDto itemDto) {
+        User user = userDao.getUserById(userId).orElseThrow(() -> new NotFoundException("User not found " + userId));
+        Item item = itemDao.getItemById(itemId).orElseThrow(() -> new NotFoundException("Item not found " + itemId));
+        return ItemMapper.toItemDto(itemDao.updateItem(user, item, itemDto));
 
-    }
-
-public boolean checkUserValidDate(UserDto userDto){
-    if (userDto.getEmail() == null || userDto.getEmail().isEmpty()) {
-        throw new ValidationException("Имейл должен быть указан");
-    }
-
-    Optional<User> alreadyExistUser = userDao.findByEmail(userDto.getEmail());
-    if (alreadyExistUser.isPresent()) {
-        throw new ValidationException("Данный имейл уже используется");
-    }
-    return true;
-}
-
-    @Override
-    public Boolean deleteAllUsers() {
-        userDao.deleteAllUsers();
-        return true;
-    }
-
-    @Override
-    public Boolean deleteUser(Long id) {
-        return userDao.deleteUser(userDao.getUserById(id).orElseThrow(()-> new NotFoundException("User not found " + id)));
-    }
-
-    @Override
-    public Collection<ItemDao> findAllItem() {
-        return List.of();
-    }
-
-    @Override
-    public UserDto addItem(ItemDto itemDto) {
-        return null;
-    }
-
-    @Override
-    public UserDto getItemById(Long id) {
-        return null;
-    }
-
-    @Override
-    public UserDto updateItem(Long id, ItemDto itemDto) {
-        return null;
     }
 
     @Override
     public Boolean deleteAllItem() {
-        return null;
+        itemDao.deleteAllItems();
+        return true;
     }
 
     @Override
     public Boolean deleteItem(Long id) {
-        return null;
+        itemDao.deleteItem(itemDao.getItemById(id).get());
+        return true;
+    }
+
+    public boolean checkUserValidDate(ItemDto itemDto) {
+        if (itemDto.getName() == null || itemDto.getName().isEmpty()) {
+            throw new ValidationException("Название должен быть указан");
+        }
+        if (itemDto.getDescription() == null || itemDto.getDescription().isEmpty()) {
+            throw new ValidationException("Описание должен быть указан");
+        }
+        if (itemDto.getAvailable() == null) {
+            throw new ValidationException("Доступность должена быть указана");
+        }
+        return true;
     }
 }

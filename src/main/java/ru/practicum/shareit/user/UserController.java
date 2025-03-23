@@ -23,7 +23,7 @@ public class UserController {
 
     @GetMapping
     public Collection<UserDto> users() {
-       return userService.findAllUsers();
+        return userService.findAllUsers();
     }
 
     @GetMapping("/{id}")

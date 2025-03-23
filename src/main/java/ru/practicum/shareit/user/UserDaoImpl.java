@@ -35,9 +35,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User updateUser(User user, UserDto updateUserDto) {
-
-        if (usersList.contains(user)) {
-        } else {
+        if (!usersList.contains(user)) {
             usersList.add(user);
         }
 

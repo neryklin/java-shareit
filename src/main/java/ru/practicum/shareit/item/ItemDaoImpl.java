@@ -53,9 +53,7 @@ public class ItemDaoImpl implements ItemDao {
 
     @Override
     public Item updateItem(User user, Item item, ItemDto updateItemDto) {
-
-        if (itemList.contains(item)) {
-        } else {
+        if (!itemList.contains(item)) {
             itemList.add(item);
         }
         item.setName(updateItemDto.getName() == null ? item.getName() : updateItemDto.getName());

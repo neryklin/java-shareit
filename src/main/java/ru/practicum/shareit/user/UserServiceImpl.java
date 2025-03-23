@@ -36,7 +36,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto addUser(UserDto request) {
-        if (checkUserValidDate(request) == true) {
+        if (checkUserValidDate(request)) {
             User user = userDao.addUser(UserMapper.toUser(request));
             return UserMapper.toUserDto(user);
         }

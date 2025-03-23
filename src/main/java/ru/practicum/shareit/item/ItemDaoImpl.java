@@ -13,7 +13,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Repository
-public class ItemrDaoImpl implements ItemDao {
+public class ItemDaoImpl implements ItemDao {
     final List<Item> itemList = new ArrayList<>();
 
     @Override

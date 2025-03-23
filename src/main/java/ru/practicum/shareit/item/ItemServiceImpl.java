@@ -53,7 +53,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public ItemDto addItem(Long userId, ItemDto itemDto) {
         User user = userDao.getUserById(userId).orElseThrow(() -> new NotFoundException("User not found " + userId));
-        if (checkUserValidDate(itemDto) == true) {
+        if (checkUserValidDate(itemDto)) {
             Item item = itemDao.addItem(user, ItemMapper.toItem(itemDto));
             return ItemMapper.toItemDto(item);
         }

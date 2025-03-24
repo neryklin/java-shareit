@@ -3,8 +3,6 @@ package ru.practicum.shareit.user.model;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import lombok.experimental.UtilityClass;
-import org.springframework.stereotype.Component;
 import ru.practicum.shareit.user.dto.UserDto;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

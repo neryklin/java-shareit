@@ -1,6 +1,7 @@
 package ru.practicum.shareit.item;
 
 import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.dto.ItemDtoCreateRequest;
 
 import java.util.Collection;
 
@@ -11,7 +12,7 @@ public interface ItemService {
 
     Collection<ItemDto> findAllItemByText(String searchText);
 
-    ItemDto addItem(Long userId, ItemDto itemDto);
+    ItemDto addItem(Long userId, ItemDtoCreateRequest itemDtoCreateRequest);
 
     ItemDto getItemById(Long id);
 

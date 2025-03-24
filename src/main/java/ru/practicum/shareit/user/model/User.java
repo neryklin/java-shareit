@@ -1,23 +1,26 @@
 package ru.practicum.shareit.user.model;
 
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.stereotype.Component;
 import ru.practicum.shareit.validation.NoWhitespace;
 
 
-@Component
-@Data
+@Entity
+@Table(name="users")
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private long id;
-    @NotBlank(message = "Имя пусто?")
-    @NoWhitespace
+    @Column(name = "name")
     private String name;
-    @Email(message = "адрес не корректный")
+    @Column(name = "email")
     private String email;
 }

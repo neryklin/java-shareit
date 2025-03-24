@@ -6,9 +6,11 @@ import org.springframework.stereotype.Service;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.dto.ItemDtoCreateRequest;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.model.ItemMapper;
 import ru.practicum.shareit.user.UserDao;
+import ru.practicum.shareit.user.UserRepository;
 import ru.practicum.shareit.user.model.User;
 
 import java.util.ArrayList;
@@ -23,20 +25,21 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class ItemServiceImpl implements ItemService {
 
-    private final ItemDao itemDao;
-    private final UserDao userDao;
+    private final ItemRepository itemRepository;
+    private final UserRepository userRepository;
+
 
     @Override
     public Collection<ItemDto> findAllItem() {
-        return itemDao.findAllItem().stream()
-                .map(o -> ItemMapper.toItemDto(o))
+        return itemRepository.findAll().stream()
+                .map(ItemMapper::toItemDto)
                 .collect(Collectors.toList());
     }
 
     @Override
     public Collection<ItemDto> getItemByUserId(Long userId) {
-        return itemDao.findAllItemByUserId(userId).stream()
-                .map(o -> ItemMapper.toItemDto(o))
+        return itemRepository.findAllByOwnerId(userId).stream()
+                .map(ItemMapper::toItemDto)
                 .collect(Collectors.toList());
     }
 
@@ -45,16 +48,19 @@ public class ItemServiceImpl implements ItemService {
         if (searchText.isEmpty()) {
             return new ArrayList<ItemDto>();
         }
-        return itemDao.findAllItemByText(searchText).stream()
-                .map(o -> ItemMapper.toItemDto(o))
+        return itemRepository.findByText(searchText).stream()
+                .map(ItemMapper::toItemDto)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public ItemDto addItem(Long userId, ItemDto itemDto) {
-        User user = userDao.getUserById(userId).orElseThrow(() -> new NotFoundException("User not found " + userId));
-        if (checkUserValidDate(itemDto)) {
-            Item item = itemDao.addItem(user, ItemMapper.toItem(itemDto));
+    public ItemDto addItem(Long userId, ItemDtoCreateRequest itemDtoCreateRequest) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found " + userId));
+        if (checkUserValidDate(itemDtoCreateRequest)) {
+            Item item = ItemMapper.toItem(itemDtoCreateRequest);
+            item.setOwner(user);
+            item.setRequest(itemDtoCreateRequest.getRequest());
+            item = itemRepository.save(item);
             return ItemMapper.toItemDto(item);
         }
         return null;
@@ -62,38 +68,45 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemDto getItemById(Long id) {
-        Item item = itemDao.getItemById(id).orElseThrow(() -> new NotFoundException("Item not found " + id));
+        Item item = itemRepository.findById(id).orElseThrow(() -> new NotFoundException("Item not found " + id));
         return ItemMapper.toItemDto(item);
     }
 
     @Override
     public ItemDto updateItem(Long userId, Long itemId, ItemDto itemDto) {
-        User user = userDao.getUserById(userId).orElseThrow(() -> new NotFoundException("User not found " + userId));
-        Item item = itemDao.getItemById(itemId).orElseThrow(() -> new NotFoundException("Item not found " + itemId));
-        return ItemMapper.toItemDto(itemDao.updateItem(user, item, itemDto));
+        User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found " + userId));
+        Item item = itemRepository.findById(itemId).orElseThrow(() -> new NotFoundException("Item not found " + itemId));
+
+        item.setName(itemDto.getName()==null ? item.getName() : itemDto.getName());
+        item.setDescription(itemDto.getDescription()==null ? item.getDescription() : itemDto.getDescription());
+        item.setAvailable(itemDto.getAvailable()==null ? item.getAvailable() : itemDto.getAvailable());
+        item.setOwner(user);
+
+
+        return ItemMapper.toItemDto(itemRepository.save(item));
 
     }
 
     @Override
     public Boolean deleteAllItem() {
-        itemDao.deleteAllItems();
+        itemRepository.deleteAll();
         return true;
     }
 
     @Override
     public Boolean deleteItem(Long id) {
-        itemDao.deleteItem(itemDao.getItemById(id).get());
+        itemRepository.deleteById(id);
         return true;
     }
 
-    public boolean checkUserValidDate(ItemDto itemDto) {
-        if (itemDto.getName() == null || itemDto.getName().isEmpty()) {
+    public boolean checkUserValidDate(ItemDtoCreateRequest itemDtoCreateRequest) {
+        if (itemDtoCreateRequest.getName() == null || itemDtoCreateRequest.getName().isEmpty()) {
             throw new ValidationException("Название должен быть указан");
         }
-        if (itemDto.getDescription() == null || itemDto.getDescription().isEmpty()) {
+        if (itemDtoCreateRequest.getDescription() == null || itemDtoCreateRequest.getDescription().isEmpty()) {
             throw new ValidationException("Описание должен быть указан");
         }
-        if (itemDto.getAvailable() == null) {
+        if (itemDtoCreateRequest.getAvailable() == null) {
             throw new ValidationException("Доступность должена быть указана");
         }
         return true;

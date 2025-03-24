@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 @Repository
 public class ItemDaoImpl implements ItemDao {
-    final List<Item> itemList = new ArrayList<>();
+    private final List<Item> itemList = new ArrayList<>();
 
     @Override
     public Collection<Item> findAllItem() {
@@ -40,8 +40,7 @@ public class ItemDaoImpl implements ItemDao {
 
     @Override
     public Optional<Item> getItemById(Long id) {
-        Optional<Item> optionalItem = itemList.stream().filter(o -> o.getId() == id).findFirst();
-        return optionalItem;
+        return itemList.stream().filter(o -> o.getId() == id).findFirst();
     }
 
     @Override

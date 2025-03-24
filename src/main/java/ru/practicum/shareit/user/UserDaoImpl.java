@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @Repository
 public class UserDaoImpl implements UserDao {
-    final List<User> usersList = new ArrayList<>();
+    private final List<User> usersList = new ArrayList<>();
 
 
     @Override
@@ -29,8 +29,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public Optional<User> getUserById(Long id) {
-        Optional<User> optionalUser = usersList.stream().filter(o -> o.getId() == id).findFirst();
-        return optionalUser;
+        return usersList.stream().filter(o -> o.getId() == id).findFirst();
     }
 
     @Override
@@ -56,8 +55,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public Optional<User> findByEmail(String email) {
-        Optional<User> optionalUser = usersList.stream().filter(o -> o.getEmail().equals(email)).findFirst();
-        return optionalUser;
+        return usersList.stream().filter(o -> o.getEmail().equals(email)).findFirst();
     }
 
     public long getNextId() {

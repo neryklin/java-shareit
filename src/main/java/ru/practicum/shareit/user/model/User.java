@@ -8,9 +8,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.practicum.shareit.validation.NoWhitespace;
 
-/**
- * TODO Sprint add-controllers.
- */
+
 @Component
 @Data
 @AllArgsConstructor

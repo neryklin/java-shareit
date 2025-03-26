@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.practicum.shareit.booking.BookingStatus;
 import ru.practicum.shareit.common.StatusBooking;
 import ru.practicum.shareit.user.dto.UserDto;
 
@@ -19,18 +18,13 @@ import java.time.LocalDateTime;
 public class BookingDtoCreateRequest {
 
     private Long id;
-
     @NotNull
     @FutureOrPresent
     private LocalDateTime start;
-
     @NotNull
     @FutureOrPresent
     private LocalDateTime end;
-
-    private Long itemId;
-
+    private long itemId;
     private UserDto booker;
-
     private StatusBooking status;
 }

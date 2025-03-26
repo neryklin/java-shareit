@@ -1,8 +1,6 @@
 package ru.practicum.shareit.booking.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Future;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import ru.practicum.shareit.common.StatusBooking;
 import ru.practicum.shareit.item.model.Item;
@@ -26,15 +24,13 @@ public class Booking {
     private LocalDateTime start;
     @Column(name = "end_date")
     private LocalDateTime end;
-    @NotNull
     @ManyToOne
     @JoinColumn(name = "item_id")
     private Item item;
-    @NotNull
     @ManyToOne
     @JoinColumn(name = "booker_id")
     private User booker;
-    @NotNull
+    @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private StatusBooking status;
 }

@@ -11,7 +11,6 @@ import ru.practicum.shareit.user.dto.UserDtoCreateRequest;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.model.UserMapper;
 
-
 import java.util.Collection;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -25,7 +24,6 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-
 
 
     @Override
@@ -62,8 +60,8 @@ public class UserServiceImpl implements UserService {
         }
         User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("User not found " + id));
 
-        user.setName(userUpdateRequest.getName()==null ? user.getName() : userUpdateRequest.getName());
-        user.setEmail(userUpdateRequest.getEmail()==null ? user.getEmail() : userUpdateRequest.getEmail());
+        user.setName(userUpdateRequest.getName() == null ? user.getName() : userUpdateRequest.getName());
+        user.setEmail(userUpdateRequest.getEmail() == null ? user.getEmail() : userUpdateRequest.getEmail());
         return UserMapper.toUserDto(userRepository.save(user));
 
     }

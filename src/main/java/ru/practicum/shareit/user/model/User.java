@@ -1,15 +1,11 @@
 package ru.practicum.shareit.user.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 import lombok.*;
-import org.springframework.stereotype.Component;
-import ru.practicum.shareit.validation.NoWhitespace;
 
-
+@Builder(toBuilder = true)
 @Entity
-@Table(name="users")
+@Table(name = "users")
 @Getter
 @Setter
 @AllArgsConstructor

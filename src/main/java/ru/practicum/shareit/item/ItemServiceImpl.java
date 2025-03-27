@@ -1,5 +1,7 @@
 package ru.practicum.shareit.item;
 
+
+import org.springframework.transaction.annotation.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -31,6 +33,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @AllArgsConstructor
+@Transactional
 public class ItemServiceImpl implements ItemService {
 
     private final ItemRepository itemRepository;
@@ -40,6 +43,7 @@ public class ItemServiceImpl implements ItemService {
 
 
     @Override
+    @Transactional(readOnly = true)
     public Collection<ItemDto> findAllItem() {
         return itemRepository.findAll().stream()
                 .map(ItemMapper::toItemDto)
@@ -47,6 +51,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Collection<ItemDto> getItemByUserId(Long userId) {
         return itemRepository.findAllByOwnerId(userId).stream()
                 .map(ItemMapper::toItemDto)
@@ -54,6 +59,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Collection<ItemDto> findAllItemByText(String searchText) {
         if (searchText.isEmpty()) {
             return new ArrayList<ItemDto>();
@@ -78,6 +84,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ItemExtendDto getItemById(Long userId, Long itemId) {
         Item item = itemRepository.findById(itemId).orElseThrow(() -> new NotFoundException("Item not found " + itemId));
 

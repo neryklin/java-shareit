@@ -3,6 +3,7 @@ package ru.practicum.shareit.booking;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingDtoCreateRequest;
 import ru.practicum.shareit.booking.model.Booking;
@@ -29,6 +30,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @AllArgsConstructor
+@Transactional
 public class BookingServiceImpl implements BookingService {
 
     private final BookingRepository bookingRepository;
@@ -66,6 +68,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<BookingDto> getBookingById(Long userId, Long bookingId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("User not found " + userId));
@@ -78,6 +81,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<BookingDto> getAllByOwnerAndState(Long ownerId, StateBooking state) {
 
         userRepository.findById(ownerId)
@@ -97,6 +101,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Collection<BookingDto> getAllByBookerAndState(long bookerId, StateBooking state) {
         User user = userRepository.findById(bookerId)
                 .orElseThrow(() -> new NotFoundException("User not found " + bookerId));

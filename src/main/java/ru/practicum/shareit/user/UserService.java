@@ -1,13 +1,14 @@
 package ru.practicum.shareit.user;
 
 import ru.practicum.shareit.user.dto.UserDto;
+import ru.practicum.shareit.user.dto.UserDtoCreateRequest;
 
 import java.util.Collection;
 
 public interface UserService {
     Collection<UserDto> findAllUsers();
 
-    UserDto addUser(UserDto user);
+    UserDto addUser(UserDtoCreateRequest userDtoCreateRequest);
 
     UserDto getUserById(Long id);
 
@@ -15,5 +16,5 @@ public interface UserService {
 
     Boolean deleteAllUsers();
 
-    Boolean deleteUser(Long id);
+    void deleteUser(Long id);
 }

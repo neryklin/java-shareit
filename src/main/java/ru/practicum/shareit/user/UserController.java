@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.user.dto.UserDto;
+import ru.practicum.shareit.user.dto.UserDtoCreateRequest;
 
 import java.util.Collection;
 
@@ -34,9 +35,9 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public UserDto create(@Valid @RequestBody UserDto newUserRequest) {
-        log.info("start create user: {}", newUserRequest);
-        return userService.addUser(newUserRequest);
+    public UserDto create(@Valid @RequestBody UserDtoCreateRequest userDtoCreateRequest) {
+        log.info("start create user: {}", userDtoCreateRequest);
+        return userService.addUser(userDtoCreateRequest);
     }
 
 

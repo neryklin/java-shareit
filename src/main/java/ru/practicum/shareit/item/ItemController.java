@@ -7,7 +7,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.dto.ItemDtoCreateRequest;
+import ru.practicum.shareit.item.dto.ItemExtendDto;
 
 import java.util.Collection;
 
@@ -32,8 +35,9 @@ public class ItemController {
     }
 
     @GetMapping("/{id}")
-    public ItemDto itemsSearch(@PathVariable @Min(0) Long id) {
-        return itemService.getItemById(id);
+    public ItemExtendDto itemsSearch(@RequestHeader("X-Sharer-User-Id") Long userId,
+                                     @PathVariable @Min(0) Long id) {
+        return itemService.getItemById(userId, id);
     }
 
 
@@ -44,9 +48,10 @@ public class ItemController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ItemDto create(@Valid @RequestBody ItemDto newItemRequest, @RequestHeader("X-Sharer-User-Id") Long userId) {
-        log.info("start create item: {}", newItemRequest);
-        return itemService.addItem(userId, newItemRequest);
+    public ItemDto create(@Valid @RequestBody ItemDtoCreateRequest itemDtoCreateRequest,
+                          @RequestHeader("X-Sharer-User-Id") Long userId) {
+        log.info("start create item: {}", itemDtoCreateRequest);
+        return itemService.addItem(userId, itemDtoCreateRequest);
     }
 
     @DeleteMapping("/{id}")
@@ -57,9 +62,19 @@ public class ItemController {
     }
 
     @PatchMapping("/{id}")
-    public ItemDto updateUser(@PathVariable @Min(0) Long id, @RequestHeader("X-Sharer-User-Id") Long userId, @Valid @RequestBody ItemDto updateUserRequest) {
+    public ItemDto updateUser(@PathVariable @Min(0) Long id,
+                              @RequestHeader("X-Sharer-User-Id") Long userId,
+                              @Valid @RequestBody ItemDto updateUserRequest) {
         log.info("start update item: {}", id);
         return itemService.updateItem(userId, id, updateUserRequest);
+    }
+
+    @PostMapping("/{itemId}/comment")
+    @ResponseStatus(HttpStatus.CREATED)
+    public CommentDto addCommentToItem(@PathVariable @Min(0) long itemId,
+                                       @RequestHeader(name = "X-Sharer-User-Id") long authorId,
+                                       @RequestBody @Valid CommentDto dto) {
+        return itemService.addCommentToItem(authorId, itemId, dto);
     }
 
 }

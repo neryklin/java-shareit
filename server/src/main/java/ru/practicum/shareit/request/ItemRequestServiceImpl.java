@@ -49,7 +49,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
     @Override
     public Collection<ItemRequestDto> getAllItemRequestsByRequestor(Long userId) {
         List<ItemRequest> itemRequests = itemRequestRepository.findAllByRequestorIdOrderByCreatedDesc(userId);
-        List<Item> items = itemRepository.findAllByItemRequestIdIn(itemRequests.stream()
+        List<Item> items = itemRepository.findAllByRequestIdIn(itemRequests.stream()
                 .map(ItemRequest::getId).toList());
         List<ItemDtoRequest> answers = items.stream().map(ItemMapper::toItemDtoRequest).toList();
 
@@ -74,7 +74,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
     public ItemRequestDto getItemRequestById(Long requestId) {
         ItemRequest itemRequest = itemRequestRepository.findById(requestId)
                 .orElseThrow(() -> new NotFoundException("Запрос с id = " + requestId + " не найден"));
-        List<ItemDtoRequest> answers = itemRepository.findAllByItemRequestIdIn(List.of(requestId)).stream()
+        List<ItemDtoRequest> answers = itemRepository.findAllByRequestIdIn(List.of(requestId)).stream()
                 .map(ItemMapper::toItemDtoRequest).toList();
         return ItemRequestMapper.toItemRequestDto(itemRequest, answers);
     }

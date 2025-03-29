@@ -26,4 +26,5 @@ public class ItemDtoCreateRequest {
 
     private ItemRequestDto request;
 
+    private Long requestId;
 }

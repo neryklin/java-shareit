@@ -18,6 +18,8 @@ import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.CommentMapper;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.model.ItemMapper;
+import ru.practicum.shareit.request.ItemRequestRepository;
+import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.user.UserRepository;
 import ru.practicum.shareit.user.model.User;
 
@@ -40,6 +42,7 @@ public class ItemServiceImpl implements ItemService {
     private final UserRepository userRepository;
     private final BookingRepository bookingRepository;
     private final CommentRepository commentRepository;
+    private final ItemRequestRepository itemRequestRepository;
 
 
     @Override
@@ -76,7 +79,11 @@ public class ItemServiceImpl implements ItemService {
         if (checkUserValidDate(itemDtoCreateRequest)) {
             Item item = ItemMapper.toItem(itemDtoCreateRequest);
             item.setOwner(user);
-            item.setRequest(itemDtoCreateRequest.getRequest());
+            if (itemDtoCreateRequest.getRequestId() != null) {
+                ItemRequest itemRequest = itemRequestRepository.findById(itemDtoCreateRequest.getRequestId())
+                        .orElseThrow(() -> new NotFoundException("Запрос с id = " + itemDtoCreateRequest.getRequestId() + " не найден"));
+                item.setRequest(itemRequest);
+            }
             item = itemRepository.save(item);
             return ItemMapper.toItemDto(item);
         }

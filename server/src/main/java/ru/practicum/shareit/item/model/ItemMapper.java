@@ -4,10 +4,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.BookingMapper;
-import ru.practicum.shareit.item.dto.CommentDto;
-import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.dto.ItemDtoCreateRequest;
-import ru.practicum.shareit.item.dto.ItemExtendDto;
+import ru.practicum.shareit.item.dto.*;
 import ru.practicum.shareit.user.model.User;
 
 import java.util.List;
@@ -59,4 +56,26 @@ public class ItemMapper {
 
         );
     }
+
+    public static ItemDtoRequest toItemDtoRequest(Item item) {
+        return new ItemDtoRequest(
+                item.getId(),
+                item.getName(),
+                item.getDescription(),
+                item.getAvailable(),
+                item.getOwner().getId(),
+                item.getRequest().getId());
+
+    }
+
+    public static ItemDtoRequest toItemDtoRequest(Item item, Long itemRequestId) {
+        return new ItemDtoRequest(
+                item.getId(),
+                item.getName(),
+                item.getDescription(),
+                item.getAvailable(),
+                item.getOwner().getId(),
+                itemRequestId);
+    }
+
 }

@@ -20,7 +20,7 @@ public class ItemRequestController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ItemRequestDto addItemRequest(@RequestBody ItemRequestrDtoCreateRequest itemRequestrDtoCreateRequest,
-                                            @RequestHeader("X-Sharer-User-Id") Long userId) {
+                                         @RequestHeader("X-Sharer-User-Id") Long userId) {
         log.info("добавление вещи: '{}' пользователя с id = {}", itemRequestrDtoCreateRequest, userId);
         return itemRequestService.addItemRequest(userId, itemRequestrDtoCreateRequest);
     }

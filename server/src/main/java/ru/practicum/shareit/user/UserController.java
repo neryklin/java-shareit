@@ -42,13 +42,13 @@ public class UserController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void delete(@PathVariable  Long id) {
+    public void delete(@PathVariable Long id) {
         log.info("start delete user: {}", id);
         userService.deleteUser(id);
     }
 
     @PatchMapping("/{id}")
-    public UserDto updateUser(@PathVariable  Long id,  @RequestBody UserDto updateUserRequest) {
+    public UserDto updateUser(@PathVariable Long id, @RequestBody UserDto updateUserRequest) {
         log.info("start update user: {}", id);
         return userService.updateUser(id, updateUserRequest);
     }

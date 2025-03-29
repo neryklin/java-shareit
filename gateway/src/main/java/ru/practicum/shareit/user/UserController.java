@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.dto.UserDtoCreateRequest;
 
-import java.util.Collection;
-
 
 @Slf4j
 @RestController
@@ -46,7 +44,7 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Object> delete(@PathVariable @Min(0) Long id) {
         log.info("start delete user: {}", id);
-       return userClient.deleteUser(id);
+        return userClient.deleteUser(id);
     }
 
     @PatchMapping("/{id}")

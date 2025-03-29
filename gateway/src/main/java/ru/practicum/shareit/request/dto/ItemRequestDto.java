@@ -4,7 +4,6 @@ import lombok.Data;
 import ru.practicum.shareit.user.dto.UserDto;
 
 
-
 @Data
 public class ItemRequestDto {
     private long id;

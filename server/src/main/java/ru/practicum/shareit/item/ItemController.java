@@ -55,13 +55,13 @@ public class ItemController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void delete(@PathVariable  Long id) {
+    public void delete(@PathVariable Long id) {
         log.info("start delete user: {}", id);
         itemService.deleteItem(id);
     }
 
     @PatchMapping("/{id}")
-    public ItemDto updateUser(@PathVariable  Long id,
+    public ItemDto updateUser(@PathVariable Long id,
                               @RequestHeader("X-Sharer-User-Id") Long userId,
                               @RequestBody ItemDto updateUserRequest) {
         log.info("start update item: {}", id);
@@ -70,9 +70,9 @@ public class ItemController {
 
     @PostMapping("/{itemId}/comment")
     @ResponseStatus(HttpStatus.CREATED)
-    public CommentDto addCommentToItem(@PathVariable  long itemId,
+    public CommentDto addCommentToItem(@PathVariable long itemId,
                                        @RequestHeader(name = "X-Sharer-User-Id") long authorId,
-                                       @RequestBody  CommentDto dto) {
+                                       @RequestBody CommentDto dto) {
         return itemService.addCommentToItem(authorId, itemId, dto);
     }
 

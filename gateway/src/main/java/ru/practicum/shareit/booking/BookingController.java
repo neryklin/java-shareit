@@ -32,22 +32,22 @@ public class BookingController {
     @Validated
     @PatchMapping("/{bookingId}")
     public ResponseEntity<Object> setBookingApproval(@RequestHeader("X-Sharer-User-Id") Long userId,
-                                         @PathVariable Long bookingId,
-                                         @RequestParam @NotNull Boolean approved) {
+                                                     @PathVariable Long bookingId,
+                                                     @RequestParam @NotNull Boolean approved) {
         log.info("start aproove booking: {}", bookingId);
         return bookingClient.setApproval(userId, bookingId, approved);
     }
 
     @GetMapping("/{bookingId}")
     public ResponseEntity<Object> getBookingById(@RequestHeader("X-Sharer-User-Id") Long userId,
-                                     @PathVariable Long bookingId) {
+                                                 @PathVariable Long bookingId) {
         log.info("start getBookingById: {}", bookingId);
         return bookingClient.getBookingById(userId, bookingId);
     }
 
     @GetMapping("/owner")
     public ResponseEntity<Object> getAllBookingsByOwner(@RequestHeader("X-Sharer-User-Id") Long userId,
-                                                  @RequestParam(required = false) StateBooking stateBooking) {
+                                                        @RequestParam(required = false) StateBooking stateBooking) {
         stateBooking = stateBooking == null ? StateBooking.ALL : stateBooking;
         log.info("start getAllBookingsByOwner booking: {}", userId);
         return bookingClient.getAllByOwnerAndState(userId, stateBooking);
